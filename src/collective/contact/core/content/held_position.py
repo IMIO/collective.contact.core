@@ -63,6 +63,8 @@ class HeldPosition(Container):
     def get_position(self):
         """Returns the position (if position field is a position)
         """
+        if not self.position:
+            return None
         pos_or_org = self.position.to_object
         if pos_or_org is None:
             return None
@@ -75,6 +77,8 @@ class HeldPosition(Container):
         """Returns the first organization related to HeldPosition
         i.e. position field or parent of the position
         """
+        if not self.position:
+            return None
         pos_or_org = self.position.to_object
         if pos_or_org is None:
             return None
@@ -86,6 +90,8 @@ class HeldPosition(Container):
     def Title(self):
         """The held position's title is constituted by the position's
         title, the organization's title and the root organization's title"""
+        if not self.position or isinstance(self.position, unicode):
+            return self.getId()
         position = self.position.to_object
         if position is None:  # the reference was removed
             return self.getId()
@@ -113,6 +119,8 @@ class HeldPosition(Container):
         the root organization and the position name (if any)
         """
         person_name = self.get_person_title()
+        if not self.position:
+            return u"%s (%s)" % (person_name, self.getId())
         if self.position.to_object is None:  # the reference was removed
             return u"%s (%s)" % (person_name, self.getId())
 
